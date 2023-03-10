@@ -1473,8 +1473,10 @@
   };
   PutPart.prototype.errorHandler = function (reason) {
     clearInterval(this.stalledInterval);
-    if (reason.match(/status:404/)) {
-      var errMsg = '404 error on part PUT. The part and the file will abort. ' + reason;
+    var message = reason instanceof Error ? reason.message : (typeof reason === 'string' ? reason : reason.toString())
+
+    if (message.match(/status:404/)) {
+      var errMsg = '404 error on part PUT. The part and the file will abort. ' + message;
       l.w(errMsg);
       this.fileUpload.error(errMsg);
       this.part.status = ABORTED;
